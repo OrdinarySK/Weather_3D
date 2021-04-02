@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springboot.springboot_demo.mapper.PreMapper" >
+
+    <insert id="insertTxt" parameterType="com.springboot.springboot_demo.entity.Pre">
+        insert into pre(Area_Station_No,Latitude,Longitude,Height,year,month,day,Rainfall_20_8,Rainfall_8_20,
+        Rainfall_20_20,Quality_control_code_20_8,Quality_control_code_8_20,Quality_control_code_20_20)
+        values (
+        #{Area_Station_No,jdbcType=INTEGER},#{Latitude,jdbcType=INTEGER},#{Longitude,jdbcType=INTEGER},#{Height,jdbcType=INTEGER},
+        #{year,jdbcType=INTEGER},#{month,jdbcType=INTEGER},#{day,jdbcType=INTEGER},#{Rainfall_20_8,jdbcType=INTEGER},
+        #{Rainfall_8_20,jdbcType=INTEGER},#{Rainfall_20_20,jdbcType=INTEGER},#{Quality_control_code_20_8,jdbcType=INTEGER},#{Quality_control_code_8_20,jdbcType=INTEGER},
+        #{Quality_control_code_20_20,jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertSsd" parameterType="java.util.List">
+        insert into ssd(
+        Area_Station_No,
+        Latitude,
+        Longitude,
+        Height,
+        year,
+        month,
+        day,
+        Sunshine_hours,
+        Sunshine_hours_quality_control_code
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.Area_Station_No,jdbcType=INTEGER},
+            #{item.Latitude,jdbcType=INTEGER},
+            #{item.Longitude,jdbcType=INTEGER},
+            #{item.Height,jdbcType=INTEGER},
+            #{item.year,jdbcType=INTEGER},
+            #{item.month,jdbcType=INTEGER},
+            #{item.day,jdbcType=INTEGER},
+            #{item.Sunshine_hours,jdbcType=INTEGER},
+            #{item.Sunshine_hours_quality_control_code,jdbcType=INTEGER}
+        )
+        </foreach>
+    </insert>
+
+    <insert id="insertPre" parameterType="java.util.List">
+        insert into pre(
+        Area_Station_No,Latitude,Longitude,Height,year,month,day,Rainfall_20_8,Rainfall_8_20,
+        Rainfall_20_20,Quality_control_code_20_8,Quality_control_code_8_20,Quality_control_code_20_20
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.Area_Station_No,jdbcType=INTEGER},
+            #{item.Latitude,jdbcType=INTEGER},
+            #{item.Longitude,jdbcType=INTEGER},
+            #{item.Height,jdbcType=INTEGER},
+            #{item.year,jdbcType=INTEGER},
+            #{item.month,jdbcType=INTEGER},
+            #{item.day,jdbcType=INTEGER},
+            #{item.Rainfall_20_8,jdbcType=INTEGER},
+            #{item.Rainfall_8_20,jdbcType=INTEGER},
+            #{item.Rainfall_20_20,jdbcType=INTEGER},
+            #{item.Quality_control_code_20_8,jdbcType=INTEGER},
+            #{item.Quality_control_code_8_20,jdbcType=INTEGER},
+            #{item.Quality_control_code_20_20,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertPrs" parameterType="java.util.List">
+        insert into prs(
+        Area_Station_No,Latitude,Longitude,Height,year,month,day,Average_pressure,The_highest_pressure_of_day,
+        The_lowest_pressure_of_day,Average_control_code,The_highest_control_code,The_lowest_control_code
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.Area_Station_No,jdbcType=INTEGER},
+            #{item.Latitude,jdbcType=INTEGER},
+            #{item.Longitude,jdbcType=INTEGER},
+            #{item.Height,jdbcType=INTEGER},
+            #{item.year,jdbcType=INTEGER},
+            #{item.month,jdbcType=INTEGER},
+            #{item.day,jdbcType=INTEGER},
+            #{item.Average_pressure,jdbcType=INTEGER},
+            #{item.The_highest_pressure_of_day,jdbcType=INTEGER},
+            #{item.The_lowest_pressure_of_day,jdbcType=INTEGER},
+            #{item.Average_control_code,jdbcType=INTEGER},
+            #{item.The_highest_control_code,jdbcType=INTEGER},
+            #{item.The_lowest_control_code,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertEvp" parameterType="java.util.List">
+        insert into evp(Area_Station_No,Latitude,Longitude,Height,
+        year,month,day,Small_evaporation,Large_evaporation,Small_evaporation_control_code,
+        Large_evaporation_control_code
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.Area_Station_No,jdbcType=INTEGER},
+            #{item.Latitude,jdbcType=INTEGER},
+            #{item.Longitude,jdbcType=INTEGER},
+            #{item.Height,jdbcType=INTEGER},
+            #{item.year,jdbcType=INTEGER},
+            #{item.month,jdbcType=INTEGER},
+            #{item.day,jdbcType=INTEGER},
+            #{item.Small_evaporation,jdbcType=INTEGER},
+            #{item.Large_evaporation,jdbcType=INTEGER},
+            #{item.Small_evaporation_control_code,jdbcType=INTEGER},
+            #{item.Large_evaporation_control_code,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertGst" parameterType="java.util.List">
+    insert into gst(Area_Station_No,Latitude,Longitude,Height,year,month,day,
+    Average_surface_temperature,The_highest_surface_temperature,The_minimum_surface_temperature,
+    Average_surface_temperature_quality_control_code,Daily_highest_surface_temperature_quality_control_code,
+    Daily_minimum_surface_temperature_quality_control_code
+    )
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+        (
+        #{item.Area_Station_No,jdbcType=INTEGER},
+        #{item.Latitude,jdbcType=INTEGER},
+        #{item.Longitude,jdbcType=INTEGER},
+        #{item.Height,jdbcType=INTEGER},
+        #{item.year,jdbcType=INTEGER},
+        #{item.month,jdbcType=INTEGER},
+        #{item.day,jdbcType=INTEGER},
+        #{item.Average_surface_temperature,jdbcType=INTEGER},
+        #{item.The_highest_surface_temperature,jdbcType=INTEGER},
+        #{item.The_minimum_surface_temperature,jdbcType=INTEGER},
+        #{item.Average_surface_temperature_quality_control_code,jdbcType=INTEGER},
+        #{item.Daily_highest_surface_temperature_quality_control_code,jdbcType=INTEGER},
+        #{item.Daily_minimum_surface_temperature_quality_control_code,jdbcType=INTEGER}
+        )
+    </foreach>
+  </insert>
+    <insert id="insertRhu" parameterType="java.util.List">
+        insert into rhu(Area_Station_No,Latitude,Longitude,Height,year,month,day,
+        Average_relative_humidity,Minimum_relative_humidity,Average_control_code,The_minimum_control_code
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.Area_Station_No,jdbcType=INTEGER},
+            #{item.Latitude,jdbcType=INTEGER},
+            #{item.Longitude,jdbcType=INTEGER},
+            #{item.Height,jdbcType=INTEGER},
+            #{item.year,jdbcType=INTEGER},
+            #{item.month,jdbcType=INTEGER},
+            #{item.day,jdbcType=INTEGER},
+            #{item.Average_relative_humidity,jdbcType=INTEGER},
+            #{item.Minimum_relative_humidity,jdbcType=INTEGER},
+            #{item.Average_control_code,jdbcType=INTEGER},
+            #{item.The_minimum_control_code,jdbcType=INTEGER}
+
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertTem" parameterType="java.util.List">
+        insert into tem(Area_Station_No,Latitude, Longitude,Height,year,month,day,
+        Average_temperature,Daily_maximum_temperature,Daily_minimum_temperature,
+        Average_control_code,The_highest_control_code,The_lowest_control_code
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.Area_Station_No,jdbcType=INTEGER},
+            #{item.Latitude,jdbcType=INTEGER},
+            #{item.Longitude,jdbcType=INTEGER},
+            #{item.Height,jdbcType=INTEGER},
+            #{item.year,jdbcType=INTEGER},
+            #{item.month,jdbcType=INTEGER},
+            #{item.day,jdbcType=INTEGER},
+            #{item.Average_temperature,jdbcType=INTEGER},
+            #{item.Daily_maximum_temperature,jdbcType=INTEGER},
+            #{item.Daily_minimum_temperature,jdbcType=INTEGER},
+            #{item.Average_control_code,jdbcType=INTEGER},
+            #{item.The_highest_control_code,jdbcType=INTEGER},
+            #{item.The_lowest_control_code,jdbcType=INTEGER}
+
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertWin" parameterType="java.util.List">
+        insert into win(Area_Station_No,Latitude, Longitude,Height,year,month,day,
+        Average_wind_speed,Maximum_wind_speed,Wind_direction_of_Maximnum_speed,
+        Large_wind_speed,Wind_direction_of_Large_wind_speed,Average_wind_speed_control_code,
+        Maximum_wind_speed_control_code,Wind_direction_maximum_wind_speed_control_code,
+        Large_wind_speed_control_code,Wind_direction_large_wind_speed_control_code
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.Area_Station_No,jdbcType=INTEGER},
+            #{item.Latitude,jdbcType=INTEGER},
+            #{item.Longitude,jdbcType=INTEGER},
+            #{item.Height,jdbcType=INTEGER},
+            #{item.year,jdbcType=INTEGER},
+            #{item.month,jdbcType=INTEGER},
+            #{item.day,jdbcType=INTEGER},
+            #{item.Average_wind_speed,jdbcType=INTEGER},
+            #{item.Maximum_wind_speed,jdbcType=INTEGER},
+            #{item.Wind_direction_of_Maximnum_speed,jdbcType=INTEGER},
+            #{item.Large_wind_speed,jdbcType=INTEGER},
+            #{item.Wind_direction_of_Large_wind_speed,jdbcType=INTEGER},
+            #{item.Average_wind_speed_control_code,jdbcType=INTEGER},
+            #{item.Maximum_wind_speed_control_code,jdbcType=INTEGER},
+            #{item.Wind_direction_maximum_wind_speed_control_code,jdbcType=INTEGER},
+            #{item.Large_wind_speed_control_code,jdbcType=INTEGER},
+            #{item.Wind_direction_large_wind_speed_control_code,jdbcType=INTEGER}
+
+
+
+            )
+        </foreach>
+    </insert>
+
+</mapper>
+

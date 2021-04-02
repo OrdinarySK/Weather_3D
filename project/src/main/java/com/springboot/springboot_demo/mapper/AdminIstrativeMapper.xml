@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springboot.springboot_demo.mapper.AdminIstrativeMapper" >
+  <resultMap id="BaseResultMap" type="com.springboot.springboot_demo.entity.AdminIstrative" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="gbCode" property="gbcode" jdbcType="VARCHAR" />
+    <result column="cName" property="cname" jdbcType="VARCHAR" />
+    <result column="xLevel" property="xlevel" jdbcType="VARCHAR" />
+    <result column="CenterX" property="centerx" jdbcType="DOUBLE" />
+    <result column="CenterY" property="centery" jdbcType="DOUBLE" />
+    <result column="MapLevel" property="maplevel" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, gbCode, cName, xLevel, CenterX, CenterY, MapLevel
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from "Administrative"
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="getXzqhTree" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from Administrative
+    where
+    1=1
+    <if test="gbcode != null and gbcode!='' ">
+     and  gbCode like  CONCAT(#{gbcode,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="maplevel != null and maplevel!='' ">
+      and MapLevel=#{maplevel,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="getCitysByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from Administrative
+    where
+    cName like CONCAT('%',#{cname,jdbcType=VARCHAR},'%')
+  </select>
+
+  <select id="getCityXY" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from Administrative
+    where gbCode =#{gbcode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getUpXY" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from Administrative
+    where gbCode like CONCAT(#{gbcode,jdbcType=VARCHAR},'%')
+    and mapLevel = #{maplevel,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from "Administrative"
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.springboot_demo.entity.AdminIstrative" >
+    insert into "Administrative" (ID, gbCode, cName, 
+      xLevel, CenterX, CenterY, 
+      MapLevel)
+    values (#{id,jdbcType=INTEGER}, #{gbcode,jdbcType=VARCHAR}, #{cname,jdbcType=VARCHAR},
+      #{xlevel,jdbcType=VARCHAR}, #{centerx,jdbcType=DOUBLE}, #{centery,jdbcType=DOUBLE},
+      #{maplevel,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.springboot.springboot_demo.entity.AdminIstrative" >
+    insert into "Administrative"
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="gbcode != null" >
+        gbCode,
+      </if>
+      <if test="cname != null" >
+        cName,
+      </if>
+      <if test="xlevel != null" >
+        xLevel,
+      </if>
+      <if test="centerx != null" >
+        CenterX,
+      </if>
+      <if test="centery != null" >
+        CenterY,
+      </if>
+      <if test="maplevel != null" >
+        MapLevel,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gbcode != null" >
+        #{gbcode,jdbcType=VARCHAR},
+      </if>
+      <if test="cname != null" >
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="xlevel != null" >
+        #{xlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="centerx != null" >
+        #{centerx,jdbcType=DOUBLE},
+      </if>
+      <if test="centery != null" >
+        #{centery,jdbcType=DOUBLE},
+      </if>
+      <if test="maplevel != null" >
+        #{maplevel,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.springboot.springboot_demo.entity.AdminIstrative" >
+    update "Administrative"
+    <set >
+      <if test="gbcode != null" >
+        gbCode = #{gbcode,jdbcType=VARCHAR},
+      </if>
+      <if test="cname != null" >
+        cName = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="xlevel != null" >
+        xLevel = #{xlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="centerx != null" >
+        CenterX = #{centerx,jdbcType=DOUBLE},
+      </if>
+      <if test="centery != null" >
+        CenterY = #{centery,jdbcType=DOUBLE},
+      </if>
+      <if test="maplevel != null" >
+        MapLevel = #{maplevel,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.springboot_demo.entity.AdminIstrative" >
+    update "Administrative"
+    set gbCode = #{gbcode,jdbcType=VARCHAR},
+      cName = #{cname,jdbcType=VARCHAR},
+      xLevel = #{xlevel,jdbcType=VARCHAR},
+      CenterX = #{centerx,jdbcType=DOUBLE},
+      CenterY = #{centery,jdbcType=DOUBLE},
+      MapLevel = #{maplevel,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

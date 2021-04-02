@@ -1,0 +1,346 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD com.example.Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.springboot_demo.mapper.UserMapper">
+    <resultMap id="resultUser" type="com.springboot.springboot_demo.entity.User">
+        <result property="name" column="name" />
+        <result property="password" column="password"/>
+        <result property="number" column="number"/>
+
+    </resultMap>
+    <resultMap id="result" type="com.springboot.springboot_demo.entity.User">
+        <result property="PRS_station_number" column="PRS_station_number" />
+        <result property="PRS_latitude" column="PRS_latitude"/>
+        <result property="PRS_longitude" column="PRS_longitude"/>
+        <result property="PRS_altitude" column="PRS_altitude"/>
+        <result property="PRS_year" column="PRS_year"/>
+        <result property="PRS_month" column="PRS_month"/>
+        <result property="PRS_day" column="PRS_day"/>
+        <result property="PRS_average_pressure" column="PRS_average_pressure"/>
+        <result property="PRS_maximum_pressure" column="PRS_maximum_pressure"/>
+        <result property="PRS_minimum_pressure" column="PRS_minimum_pressure"/>
+        <result property="PRS_average_pressure_code" column="PRS_average_pressure_code"/>
+        <result property="PRS_maximum_pressure_code" column="PRS_maximum_pressure_code"/>
+        <result property="PRS_minimum_pressure_code" column="PRS_minimum_pressure_code"/>
+    </resultMap>
+    <resultMap id="result_PRS_station_number" type="com.springboot.springboot_demo.entity.User">
+        <result property="AVG_PRS_average_pressure" column="AVG(s.PRS_average_pressure)" />
+    </resultMap>
+
+    <select id="ProvinceStationData" resultType="com.springboot.springboot_demo.entity.ProvinceStation">
+        SELECT n.provice,n.position,avg(n.latitude) as latitude,avg(n.longitude) as longitude FROM station n group by n.provice;
+    </select>
+    <select id="StationMarkerData" resultType="com.springboot.springboot_demo.entity.ProvinceStation">
+        SELECT n.provice,n.position,n.latitude,n.longitude FROM station n ;
+    </select>
+<!--    <select id="ListUser" resultMap="result">-->
+<!--        SELECT * FROM user-->
+<!--    </select>-->
+
+    <select id="ProvinceAverageByName" resultType="com.springboot.springboot_demo.entity.User">
+<!--        SELECT AVG(s.PRS_average_pressure) as AVG_PRS_average_pressure FROM prs s where s.PRS_station_number IN (SELECT n.station_number from station n where n.provice = #{name});-->
+        select * from province_average_data where province=#{name}
+    </select>
+
+    <select id="ProvinceAverageTemperatureByName" resultType="com.springboot.springboot_demo.entity.User">
+        SELECT AVG(s.PRS_average_pressure) as AVG_PRS_average_pressure FROM prs s where s.PRS_station_number IN (SELECT n.station_number from station n where n.provice = #{name});
+    </select>
+
+<!--    <select id="findUserByName" resultMap="result">-->
+<!--        SELECT * FROM user where name=#{name}-->
+<!--    </select>-->
+
+    <insert id="insertUser" parameterType="com.springboot.springboot_demo.entity.User"
+            keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user(id,name,password,number)
+        VALUES (#{id},#{name, jdbcType=VARCHAR},#{password, jdbcType=VARCHAR},#{number} )
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from user where id=#{id}
+    </delete>
+
+    <update id="Update" parameterType="com.springboot.springboot_demo.entity.User">
+        update user set user.name=#{name},user.password=#{password},user.number=#{number} where user.id=#{id}
+    </update>
+<!--    站点页面观测数据-->
+    <select id="StationPressureData" resultType="com.springboot.springboot_demo.entity.StationHistoryObserveData">
+        SELECT
+        s.PRS_average_pressure,
+        s.PRS_year as year,
+        s.PRS_month as month,
+        s.PRS_day as day
+        FROM
+        station n
+        LEFT JOIN prs s ON s.PRS_station_number = n.station_number
+        WHERE
+        n.position = #{name}
+    </select>
+    <select id="StationTemperatureData" resultType="com.springboot.springboot_demo.entity.StationHistoryObserveData">
+        SELECT
+        m.TEM_average_temperature,
+        m.TEM_year as year,
+        m.TEM_month as month,
+        m.TEM_day as day
+        FROM
+        station n
+        LEFT JOIN tem m ON m.TEM_station_number = n.station_number
+        WHERE
+        n.position = #{name}
+    </select>
+    <select id="StationHumidityData" resultType="com.springboot.springboot_demo.entity.StationHistoryObserveData">
+        SELECT
+        u.RHU_average_humidity,
+        u.RHU_year as year,
+        u.RHU_month as month,
+        u.RHU_day as day
+        FROM
+        station n
+        LEFT JOIN rhu u ON u.RHU_station_number = n.station_number
+        WHERE
+        n.position = #{name}
+    </select>
+    <select id="StationPecipitationData" resultType="com.springboot.springboot_demo.entity.StationHistoryObserveData">
+        SELECT
+        e.PRE_20_20_cmulative_recipitation,
+        e.PRE_year as year,
+        e.PRE_month as month,
+        e.PRE_day as day
+        FROM
+        station n
+        LEFT JOIN pre e ON e.PRE_station_number = n.station_number
+        WHERE
+        n.position = #{name}
+    </select>
+    <select id="StationEvaporationData" resultType="com.springboot.springboot_demo.entity.StationHistoryObserveData">
+        SELECT
+        p.EVP_small_evaporation,
+        p.EVP_year as year,
+        p.EVP_month as month,
+        p.EVP_day as day
+        FROM
+        station n
+        LEFT JOIN evp p ON p.EVP_station_number = n.station_number
+        WHERE
+        n.position =  #{name}
+    </select>
+    <select id="StationWindSpeedData" resultType="com.springboot.springboot_demo.entity.StationHistoryObserveData">
+        SELECT
+        w.WIN_average_wind_speed,
+        w.WIN_year as year,
+        w.WIN_month as month,
+        w.WIN_day as day
+        FROM
+        station n
+        LEFT JOIN win w ON w.WIN_station_number = n.station_number
+        WHERE
+        n.position =  #{name}
+    </select>
+    <select id="StationSunshineHoursData" resultType="com.springboot.springboot_demo.entity.StationHistoryObserveData">
+        SELECT
+        d.SSD_sunshine_hours,
+        d.SSD_year as year,
+        d.SSD_month as month,
+        d.SSD_day as day
+        FROM
+        station n
+        LEFT JOIN ssd d ON d.SSD_station_number = n.station_number
+        WHERE
+        n.position =  #{name}
+    </select>
+    <select id="StationSurfaceTemperatureData" resultType="com.springboot.springboot_demo.entity.StationHistoryObserveData">
+        SELECT
+        t.GST_average_surface_temperature,
+        t.GST_year as year,
+        t.GST_month as month,
+        t.GST_day as day
+        FROM
+        station n
+        LEFT JOIN gst t ON t.GST_station_number = n.station_number
+        WHERE
+        n.position = #{name}
+    </select>
+
+<!--    省级界面极端天气总和-->
+    <select id="CountrySumData_cold_wave" resultType="com.springboot.springboot_demo.entity.CountrySumData">
+        select COUNT(*) as country_sum from cold_wave_data a where a.TEM_year=2011 UNION
+        select COUNT(*) as country_sum from cold_wave_data a where a.TEM_year=2012 UNION
+        select COUNT(*) as country_sum from cold_wave_data a where a.TEM_year=2013 UNION
+        select COUNT(*) as country_sum from cold_wave_data a where a.TEM_year=2014 UNION
+        select COUNT(*) as country_sum from cold_wave_data a where a.TEM_year=2015 UNION
+        select COUNT(*) as country_sum from cold_wave_data a where a.TEM_year=2016 ;
+    </select>
+    <select id="CountrySumData_high_temperature" resultType="com.springboot.springboot_demo.entity.CountrySumData">
+        select COUNT(*) as country_sum from high_temperature_data a where a.TEM_year=2011 UNION
+        select COUNT(*) as country_sum from high_temperature_data a where a.TEM_year=2012 UNION
+        select COUNT(*) as country_sum from high_temperature_data a where a.TEM_year=2013 UNION
+        select COUNT(*) as country_sum from high_temperature_data a where a.TEM_year=2014 UNION
+        select COUNT(*) as country_sum from high_temperature_data a where a.TEM_year=2015 UNION
+        select COUNT(*) as country_sum from high_temperature_data a where a.TEM_year=2016 ;
+    </select>
+    <select id="CountrySumData_heavy_rain" resultType="com.springboot.springboot_demo.entity.CountrySumData">
+        select COUNT(*) as country_sum from heavy_rain_data a where a.PRE_year=2011 UNION
+        select COUNT(*) as country_sum from heavy_rain_data a where a.PRE_year=2012 UNION
+        select COUNT(*) as country_sum from heavy_rain_data a where a.PRE_year=2013 UNION
+        select COUNT(*) as country_sum from heavy_rain_data a where a.PRE_year=2014 UNION
+        select COUNT(*) as country_sum from heavy_rain_data a where a.PRE_year=2015 UNION
+        select COUNT(*) as country_sum from heavy_rain_data a where a.PRE_year=2016 ;
+    </select>
+    <select id="CountrySumData_gale" resultType="com.springboot.springboot_demo.entity.CountrySumData">
+        select COUNT(*) as country_sum from gale_data a where a.WIN_year=2011 UNION
+        select COUNT(*) as country_sum from gale_data a where a.WIN_year=2012 UNION
+        select COUNT(*) as country_sum from gale_data a where a.WIN_year=2013 UNION
+        select COUNT(*) as country_sum from gale_data a where a.WIN_year=2014 UNION
+        select COUNT(*) as country_sum from gale_data a where a.WIN_year=2015 UNION
+        select COUNT(*) as country_sum from gale_data a where a.WIN_year=2016 ;
+    </select>
+    <select id="CountrySumData_strong_tropical_storm" resultType="com.springboot.springboot_demo.entity.CountrySumData">
+        select COUNT(*) as country_sum from strong_tropical_storm_data a where a.WIN_year=2011 UNION
+        select COUNT(*) as country_sum from strong_tropical_storm_data a where a.WIN_year=2012 UNION
+        select COUNT(*) as country_sum from strong_tropical_storm_data a where a.WIN_year=2013 UNION
+        select COUNT(*) as country_sum from strong_tropical_storm_data a where a.WIN_year=2014 UNION
+        select COUNT(*) as country_sum from strong_tropical_storm_data a where a.WIN_year=2015 UNION
+        select COUNT(*) as country_sum from strong_tropical_storm_data a where a.WIN_year=2016 ;
+    </select>
+<!--    站点页面历史观测数据平均值-->
+    <select id="get_station_avg_data_by_station_name" resultType="com.springboot.springboot_demo.entity.StationAverageData">
+        SELECT
+        AVG(e.PRE_20_20_cmulative_recipitation) as station_avg_data
+        FROM
+        pre e
+        WHERE
+        e.PRE_station_number = (
+        SELECT
+        n.station_number
+        FROM
+        station n
+        WHERE
+        n.position = #{name}
+        )
+        UNION
+        SELECT
+        AVG(p.EVP_small_evaporation) as station_avg_data
+        FROM
+        evp p
+        WHERE
+        p.EVP_station_number = (
+        SELECT
+        n.station_number
+        FROM
+        station n
+        WHERE
+        n.position = #{name}
+        )
+        UNION
+        SELECT
+        AVG(w.WIN_average_wind_speed) as station_avg_data
+        FROM
+        win w
+        WHERE
+        w.WIN_station_number = (
+        SELECT
+        n.station_number
+        FROM
+        station n
+        WHERE
+        n.position = #{name}
+        )
+        UNION
+        SELECT
+        AVG(d.SSD_sunshine_hours) as station_avg_data
+        FROM
+        ssd d
+        WHERE
+        d.SSD_station_number = (
+        SELECT
+        n.station_number
+        FROM
+        station n
+        WHERE
+        n.position = #{name}
+        );
+    </select>
+
+    <select id="get_station_extreme_weather_data_by_name" resultType="com.springboot.springboot_demo.entity.StationAverageData">
+        SELECT
+        COUNT(*) AS station_avg_data
+        FROM
+        heavy_rain_data a
+        WHERE
+        a.PRE_station_number = (
+        SELECT
+        n.station_number
+        FROM
+        station n
+        WHERE
+        n.position = #{name}
+        )
+        UNION all
+        SELECT
+        COUNT(*) AS station_avg_data
+        FROM
+        high_temperature_data a
+        WHERE
+        a.TEM_station_number = (
+        SELECT
+        n.station_number
+        FROM
+        station n
+        WHERE
+        n.position = #{name}
+        )
+        UNION ALL
+        SELECT
+        COUNT(*) AS station_avg_data
+        FROM
+        strong_tropical_storm_data a
+        WHERE
+        a.WIN_station_number = (
+        SELECT
+        n.station_number
+        FROM
+        station n
+        WHERE
+        n.position = #{name}
+        )
+        UNION ALL
+        SELECT
+        COUNT(*) AS station_avg_data
+        FROM
+        cold_wave_data a
+        WHERE
+        a.TEM_station_number= (
+        SELECT
+        n.station_number
+        FROM
+        station n
+        WHERE
+        n.position = #{name}
+        )
+        UNION ALL
+        SELECT
+        COUNT(*) AS station_avg_data
+        FROM
+        gale_data a
+        WHERE
+        a.WIN_station_number= (
+        SELECT
+        n.station_number
+        FROM
+        station n
+        WHERE
+        n.position = #{name}
+        );
+    </select>
+
+    <select id="getAllStation" resultType="java.util.Map">
+        select
+        g.Area_Station_No,g.Longitude/100, g.Latitude/100,  s.position
+        from gst  g
+        INNER JOIN station s
+        on
+        s.station_number = g.Area_Station_No
+        GROUP BY g.Area_Station_No
+    </select>
+</mapper>
